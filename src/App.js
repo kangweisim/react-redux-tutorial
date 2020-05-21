@@ -1,26 +1,40 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { actions } from "./store";
 
-function App() {
+function MyFavouriteNumbers() {
+  const [numToAdd, setNumToAdd] = useState("");
+  const numbers = useSelector(state => state.numbers);
+  const dispatch = useDispatch();
+
+  const addNum = () => {
+    if (numToAdd) dispatch(actions.numbers.add(numToAdd));
+    setNumToAdd("");
+  }
+
+  const removeNum = (num) => {
+    dispatch(actions.numbers.remove(num));
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <input type="number" value={numToAdd} onChange={(e) => setNumToAdd(e.target.value)} />
+      <button onClick={() => addNum()}>
+        Add
+      </button>
+      {numbers.map((num, index) => (
+        <div key={index}>
+          <button onClick={() => removeNum(num)}>{num}</button>
+        </div>
+      ))}
     </div>
   );
 }
 
-export default App;
+function IsEvenNumber(props) {
+  const { num } = props;
+  const isEven = num % 2 === 0;
+  return isEven ? "Even Steven!" : "That's odd...";
+}
+
+export default MyFavouriteNumbers;
